@@ -168,9 +168,10 @@ class PayslipViewModel(
             } else {
                 val error = result.exceptionOrNull()
                 val rawMessage = error?.message ?: ""
+                val safeFilename = com.payslipmax.pdfparser.telemetry.TelemetrySanitizer.sanitizeFilename(filename)
                 com.payslipmax.pdfparser.logging.Logger.e(
                     "PayslipViewModel",
-                    "importPayslip failed for $filename: $rawMessage",
+                    "importPayslip failed for $safeFilename: $rawMessage",
                     error,
                 )
                 val friendlyError =

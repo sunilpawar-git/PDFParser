@@ -58,4 +58,16 @@ class TelemetrySanitizerTest {
         assertFalse(sanitized.containsKey("officer_name"))
         assertFalse(sanitized.containsKey("salary_total"))
     }
+
+    @Test
+    fun sanitizeFilename_replacesPiiFilenameWithDeterministicHash() {
+        val raw = "Sunil_Pawar_Jan2025_Payslip.pdf"
+        val sanitized = TelemetrySanitizer.sanitizeFilename(raw)
+        assertTrue(sanitized.startsWith("file_"))
+        assertTrue(sanitized.endsWith(".pdf"))
+        assertFalse(sanitized.contains("Sunil"))
+        assertFalse(sanitized.contains("Pawar"))
+        // Deterministic
+        assertEquals(sanitized, TelemetrySanitizer.sanitizeFilename(raw))
+    }
 }

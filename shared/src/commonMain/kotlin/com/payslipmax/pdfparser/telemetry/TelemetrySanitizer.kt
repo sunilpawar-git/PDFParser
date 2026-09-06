@@ -59,6 +59,13 @@ object TelemetrySanitizer {
         return ALLOWED_KEY_PREFIXES.any { lower.startsWith(it) || lower == it }
     }
 
+    fun sanitizeFilename(filename: String): String {
+        val ext = filename.substringAfterLast('.', "").lowercase().trim()
+        val extensionSuffix = if (ext.isNotEmpty()) ".$ext" else ""
+        val hash = (filename.hashCode() and 0x7FFFFFFF).toString(16).padStart(8, '0')
+        return "file_$hash$extensionSuffix"
+    }
+
     fun sanitizeMessage(message: String): String {
         var result = message
         // Redact PAN numbers
