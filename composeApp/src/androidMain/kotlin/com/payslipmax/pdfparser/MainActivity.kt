@@ -11,12 +11,10 @@ import com.payslipmax.pdfparser.ui.PayslipViewModel
 import org.koin.compose.koinInject
 
 /**
- * Shipped builds always block screenshots/screen-recording (every screen can show real salary/PII
- * data); debug builds skip it so `adb screencap` isn't blind during development/verification. A pure
- * function so this policy is testable independent of which BuildConfig variant Robolectric compiles
- * against (always `debug` for JVM unit tests, regardless of what's actually being verified).
+ * Shipped builds usually block screenshots/screen-recording (FLAG_SECURE).
+ * Temporarily disabled during testing so users can capture screenshots and report issues.
  */
-internal fun shouldApplyFlagSecure(isDebug: Boolean): Boolean = !isDebug
+internal fun shouldApplyFlagSecure(isDebug: Boolean): Boolean = false
 
 class MainActivity : ComponentActivity() {
     private var filePickCallback: ((ByteArray, String) -> Unit)? = null
