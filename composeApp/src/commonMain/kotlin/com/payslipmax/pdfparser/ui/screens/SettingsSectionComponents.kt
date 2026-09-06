@@ -198,6 +198,7 @@ fun DeveloperSandboxSection(
             StagingCard(
                 onSeedClick = { viewModel.seedMockData() },
                 onClearClick = { viewModel.clearAllData() },
+                onCrashTestClick = { com.payslipmax.pdfparser.telemetry.triggerTestCrash() },
             )
         }
     }

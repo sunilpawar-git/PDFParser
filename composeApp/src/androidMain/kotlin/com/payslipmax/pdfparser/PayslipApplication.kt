@@ -10,6 +10,11 @@ class PayslipApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         com.payslipmax.pdfparser.crypto.ContextHolder.context = this
+        try {
+            com.google.firebase.crashlytics.FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(true)
+        } catch (_: Exception) {
+            // No-op under unit test runners where Firebase is not initialized
+        }
         // Idempotent: Koin's GlobalContext is a JVM-wide singleton. Real devices only ever call
         // onCreate() once per process, so this guard is a no-op there — it only matters under
         // Robolectric, where multiple test classes share a JVM fork and each reconstructs this

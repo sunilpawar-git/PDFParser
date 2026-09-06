@@ -10,6 +10,7 @@ import com.payslipmax.pdfparser.ui.theme.AppStrings
 fun StagingCard(
     onSeedClick: () -> Unit,
     onClearClick: () -> Unit,
+    onCrashTestClick: (() -> Unit)? = null,
     modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier.fillMaxWidth()) {
@@ -25,5 +26,13 @@ fun StagingCard(
             title = AppStrings.settingsStagingClearBtn,
             onClick = onClearClick,
         )
+        if (onCrashTestClick != null) {
+            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
+            SettingsRow(
+                icon = "💥",
+                title = AppStrings.settingsStagingCrashTestBtn,
+                onClick = onCrashTestClick,
+            )
+        }
     }
 }
