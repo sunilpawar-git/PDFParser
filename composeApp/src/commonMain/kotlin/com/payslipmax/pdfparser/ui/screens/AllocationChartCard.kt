@@ -86,8 +86,9 @@ private fun AllocationLegend(
                     Spacer(modifier = Modifier.width(AppDimensions.SpacingSmall))
                     Text(text = label, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
+                val rawPct = if (gross > 0.0) ((pct * 10).toInt() / 10.0).toString() else "0.0"
                 Text(
-                    text = "₹${formatAmount(value.toDouble())} (${pct.toString().take(4)}%)",
+                    text = "₹${formatAmount(value.toDouble())} ($rawPct%)",
                     style = MaterialTheme.typography.bodyMedium,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onSurface,
