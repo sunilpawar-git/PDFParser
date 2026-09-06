@@ -26,6 +26,7 @@ import com.payslipmax.pdfparser.ui.updateDraftCorrection
  * — closing the cross-payslip correction-corruption gap the old arrow-bypasses-BackHandler path had.
  */
 @OptIn(ExperimentalComposeUiApi::class)
+@Suppress("DEPRECATION")
 @Composable
 fun PayslipReplicaDetailScreen(
     viewModel: PayslipViewModel,

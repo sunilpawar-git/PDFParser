@@ -16,6 +16,10 @@ import androidx.compose.ui.text.style.TextAlign
 import com.payslipmax.pdfparser.ui.theme.AppDimensions
 import com.payslipmax.pdfparser.ui.theme.AppStrings
 
+@Deprecated(
+    message = "Replaced by ImportPayslipDialog in com.payslipmax.pdfparser.ui.screens.importflow",
+    level = DeprecationLevel.WARNING,
+)
 @Composable
 fun UploadWidget(
     isLoading: Boolean,

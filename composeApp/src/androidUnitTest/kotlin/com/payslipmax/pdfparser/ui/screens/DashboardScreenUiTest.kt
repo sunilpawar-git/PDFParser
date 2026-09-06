@@ -60,7 +60,7 @@ class DashboardScreenUiTest {
             setContent {
                 DashboardScreen(
                     viewModel = viewModel,
-                    onPickPdfTrigger = {},
+                    onPickPdf = {},
                 )
             }
 
@@ -81,7 +81,7 @@ class DashboardScreenUiTest {
             setContent {
                 DashboardScreen(
                     viewModel = viewModel,
-                    onPickPdfTrigger = {},
+                    onPickPdf = {},
                 )
             }
 
@@ -117,7 +117,7 @@ class DashboardScreenUiTest {
             setContent {
                 DashboardScreen(
                     viewModel = viewModel,
-                    onPickPdfTrigger = {},
+                    onPickPdf = {},
                 )
             }
             testDispatcher.scheduler.runCurrent()
@@ -150,7 +150,7 @@ class DashboardScreenUiTest {
             setContent {
                 DashboardScreen(
                     viewModel = viewModel,
-                    onPickPdfTrigger = {},
+                    onPickPdf = {},
                 )
             }
             testDispatcher.scheduler.runCurrent()
@@ -195,7 +195,7 @@ class DashboardScreenUiTest {
             setContent {
                 DashboardScreen(
                     viewModel = viewModel,
-                    onPickPdfTrigger = {},
+                    onPickPdf = {},
                 )
             }
             testDispatcher.scheduler.runCurrent()
