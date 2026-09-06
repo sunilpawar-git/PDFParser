@@ -36,5 +36,14 @@ class PayslipApplication : Application() {
                 modules(sharedModule, appModule)
             }
         }
+
+        try {
+            val installationIdManager = GlobalContext.get().get<com.payslipmax.pdfparser.telemetry.InstallationIdManager>()
+            val anonId = installationIdManager.getOrCreateInstallationId()
+            val crashReporter = GlobalContext.get().get<com.payslipmax.pdfparser.telemetry.CrashReporter>()
+            crashReporter.setUserId(anonId)
+        } catch (_: Exception) {
+            // Safe guard during unit tests
+        }
     }
 }

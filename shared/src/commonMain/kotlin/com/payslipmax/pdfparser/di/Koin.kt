@@ -60,6 +60,10 @@ val sharedModule: Module =
         single<com.payslipmax.pdfparser.telemetry.CrashReporter> {
             com.payslipmax.pdfparser.telemetry.provideCrashReporter()
         }
+
+        single {
+            com.payslipmax.pdfparser.telemetry.InstallationIdManager()
+        }
     }
 
 /**
