@@ -55,6 +55,10 @@ class PayslipViewModel(
     internal val _premiumPriceState = MutableStateFlow(AppStrings.settingsPremiumPlanPrice)
     val premiumPriceState: StateFlow<String> = _premiumPriceState.asStateFlow()
 
+    // Temporary in-memory cache for the active import session; cleared immediately on dismiss or success.
+    internal var pendingImportPdfBytes: ByteArray? = null
+    internal var pendingImportFilename: String? = null
+
     init {
         verifyAppIntegrity()
         checkGemmaSupport()

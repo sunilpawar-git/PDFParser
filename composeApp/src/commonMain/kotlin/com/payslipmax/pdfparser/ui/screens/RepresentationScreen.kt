@@ -28,6 +28,7 @@ import com.payslipmax.pdfparser.utils.sharePdf
 import com.payslipmax.pdfparser.utils.shareText
 
 @OptIn(ExperimentalComposeUiApi::class)
+@Suppress("DEPRECATION")
 @Composable
 fun RepresentationScreen(
     viewModel: PayslipViewModel,

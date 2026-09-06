@@ -11,6 +11,7 @@ data class PayslipUiState(
     val error: String? = null,
     val importError: String? = null,
     val importSuccess: Boolean = false,
+    val importUiState: ImportUiState = ImportUiState.Idle,
     val isPremiumEnabled: Boolean = false,
     val appTheme: String = "system",
     val isLockEnabled: Boolean = false,

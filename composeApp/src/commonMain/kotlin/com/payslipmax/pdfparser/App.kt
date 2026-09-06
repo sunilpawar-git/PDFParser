@@ -125,6 +125,7 @@ fun App(
 }
 
 @OptIn(ExperimentalComposeUiApi::class)
+@Suppress("DEPRECATION")
 @Composable
 private fun MainScaffold(
     navState: AppNavState,
@@ -212,11 +213,7 @@ private fun ScreenContent(
                 )
             Screen.Insights -> InsightsScreen(viewModel = viewModel, onNavigateTo = onNavigate)
             Screen.Settings -> SettingsScreen(viewModel = viewModel, onNavigateTo = onNavigate, onPickBackup = onPickBackup)
-            else ->
-                DashboardScreen(
-                    viewModel = viewModel,
-                    onPickPdfTrigger = { password -> onPickPdf { bytes, name -> viewModel.importPayslip(bytes, password, name) } },
-                )
+            else -> DashboardScreen(viewModel = viewModel, onPickPdf = onPickPdf)
         }
     }
 }

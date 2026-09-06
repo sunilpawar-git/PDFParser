@@ -15,13 +15,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.window.Dialog
 import com.payslipmax.pdfparser.domain.ParsedPayslip
 import com.payslipmax.pdfparser.domain.SalaryCountdownCalculator
+import com.payslipmax.pdfparser.ui.ImportUiState
 import com.payslipmax.pdfparser.ui.PayslipUiState
 import com.payslipmax.pdfparser.ui.PayslipViewModel
-import com.payslipmax.pdfparser.ui.clearError
+import com.payslipmax.pdfparser.ui.onDismissImport
+import com.payslipmax.pdfparser.ui.onFilePicked
+import com.payslipmax.pdfparser.ui.onImportPasswordChanged
+import com.payslipmax.pdfparser.ui.onSubmitImportPassword
+import com.payslipmax.pdfparser.ui.onToggleImportPasswordVisibility
 import com.payslipmax.pdfparser.ui.saveDashboardScrollPosition
+import com.payslipmax.pdfparser.ui.screens.importflow.ImportPayslipDialog
 import com.payslipmax.pdfparser.ui.theme.AppDimensions
 import com.payslipmax.pdfparser.ui.theme.AppStrings
 import kotlin.math.round
@@ -29,7 +34,7 @@ import kotlin.math.round
 @Composable
 fun DashboardScreen(
     viewModel: PayslipViewModel,
-    onPickPdfTrigger: (password: String) -> Unit,
+    onPickPdf: (onResult: (ByteArray, String) -> Unit) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -38,7 +43,44 @@ fun DashboardScreen(
 
     var showUploadDialog by remember { mutableStateOf(false) }
 
-    Box(modifier = Modifier.fillMaxSize()) {
+    LaunchedEffect(uiState.importUiState) {
+        if (uiState.importUiState is ImportUiState.Success) {
+            showUploadDialog = false
+        }
+    }
+
+    DashboardContent(
+        uiState = uiState,
+        payslips = payslips,
+        selected = selected,
+        viewModel = viewModel,
+        onUploadClick = { showUploadDialog = true },
+        modifier = modifier,
+    )
+
+    if (showUploadDialog) {
+        DashboardImportDialog(
+            importUiState = uiState.importUiState,
+            viewModel = viewModel,
+            onPickPdf = onPickPdf,
+            onDismiss = {
+                viewModel.onDismissImport()
+                showUploadDialog = false
+            },
+        )
+    }
+}
+
+@Composable
+private fun DashboardContent(
+    uiState: PayslipUiState,
+    payslips: List<ParsedPayslip>,
+    selected: ParsedPayslip?,
+    viewModel: PayslipViewModel,
+    onUploadClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Box(modifier = modifier.fillMaxSize()) {
         if (uiState.isLoading && payslips.isEmpty()) {
             Box(
                 modifier =
@@ -50,18 +92,14 @@ fun DashboardScreen(
                 CircularProgressIndicator()
             }
         } else if (payslips.isEmpty()) {
-            EmptyDashboardPlaceholder(modifier.testTag("dashboard_empty"))
+            EmptyDashboardPlaceholder(Modifier.testTag("dashboard_empty"))
         } else {
-            PopulatedDashboard(payslips, selected, viewModel, modifier.testTag("dashboard_populated"))
+            PopulatedDashboard(payslips, selected, viewModel, Modifier.testTag("dashboard_populated"))
         }
         UploadFab(
-            onClick = { showUploadDialog = true },
+            onClick = onUploadClick,
             modifier = Modifier.align(Alignment.BottomEnd).testTag("upload_fab"),
         )
-    }
-
-    if (showUploadDialog) {
-        UploadDialog(uiState, onPickPdfTrigger, viewModel, onDismiss = { showUploadDialog = false })
     }
 }
 
@@ -81,22 +119,25 @@ private fun UploadFab(
 }
 
 @Composable
-private fun UploadDialog(
-    uiState: PayslipUiState,
-    onPickPdfTrigger: (password: String) -> Unit,
+private fun DashboardImportDialog(
+    importUiState: ImportUiState,
     viewModel: PayslipViewModel,
+    onPickPdf: (onResult: (ByteArray, String) -> Unit) -> Unit,
     onDismiss: () -> Unit,
 ) {
-    Dialog(onDismissRequest = onDismiss) {
-        UploadWidget(
-            isLoading = uiState.isLoading,
-            error = uiState.importError,
-            success = uiState.importSuccess,
-            onPickPdfTrigger = onPickPdfTrigger,
-            onClearError = { viewModel.clearError() },
-            onDismiss = onDismiss,
-        )
-    }
+    ImportPayslipDialog(
+        importUiState = importUiState,
+        onSelectFileClick = {
+            onPickPdf { bytes, name -> viewModel.onFilePicked(bytes, name) }
+        },
+        onPasswordChanged = { viewModel.onImportPasswordChanged(it) },
+        onTogglePasswordVisibility = { viewModel.onToggleImportPasswordVisibility() },
+        onSubmitPassword = { viewModel.onSubmitImportPassword() },
+        onChooseDifferentFile = {
+            onPickPdf { bytes, name -> viewModel.onFilePicked(bytes, name) }
+        },
+        onDismiss = onDismiss,
+    )
 }
 
 @Composable
