@@ -179,6 +179,7 @@ object AppStrings {
     const val settingsStagingDesc = "Load simulated Army Officer records (2022-2025) to evaluate the analytical tools immediately."
     const val settingsStagingSeedBtn = "Seed Staging Data"
     const val settingsStagingClearBtn = "Clear All"
+    const val settingsStagingCrashTestBtn = "Crash Test (Crashlytics)"
     const val settingsHelpDocsHeader = "Help & Legal"
     const val settingsHelpFaqTitle = "Frequently Asked Questions (FAQ)"
     const val settingsHelpPrivacyTitle = "Privacy Policy"
