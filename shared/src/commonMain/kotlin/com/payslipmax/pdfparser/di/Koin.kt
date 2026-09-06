@@ -56,6 +56,10 @@ val sharedModule: Module =
         single {
             com.payslipmax.pdfparser.repository.FinancialIntelligenceRepository(get())
         }
+
+        single<com.payslipmax.pdfparser.telemetry.CrashReporter> {
+            com.payslipmax.pdfparser.telemetry.provideCrashReporter()
+        }
     }
 
 /**
