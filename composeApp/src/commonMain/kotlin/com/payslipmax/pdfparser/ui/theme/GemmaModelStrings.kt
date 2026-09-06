@@ -9,4 +9,11 @@ object GemmaModelStrings {
     const val gemmaAiSettingRowSubtitleUnsupported = "Requires device with 4GB RAM and 1.5GB free storage."
     const val gemmaModelDownloadBannerMessage =
         "Offline AI Model (~529MB) downloading in background. Devices with >3.5GB RAM get the most accurate parsing."
+    const val gemmaModelWaitingForWifiTitle = "Offline AI Model (~529MB) Paused"
+    const val gemmaModelWaitingForWifiSubtitle =
+        "Waiting for Wi-Fi connection. You can wait or proceed using mobile data."
+    const val gemmaModelDownloadCellularAction = "Download on Mobile Data"
+    const val gemmaModelDownloadingTitle = "Downloading Offline AI Model"
+    const val gemmaModelDownloadErrorTitle = "Offline AI Download Error"
+    const val gemmaModelRetryAction = "Retry"
 }

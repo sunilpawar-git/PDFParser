@@ -60,18 +60,42 @@ internal fun PayslipViewModel.installGemmaBaseModel() {
     }
 }
 
+/**
+ * Initiates or resumes the offline Gemma base model download (e.g. when paused waiting for Wi-Fi,
+ * invoking Play Core's cellular consent flow or re-requesting fetch).
+ */
+fun PayslipViewModel.resumeModelDownload() {
+    viewModelScope.launch {
+        gemmaBaseModelInstaller.install()
+    }
+}
+
 private fun PayslipUiState.applyInstallState(installState: BaseModelInstallState): PayslipUiState =
     when (installState) {
         is BaseModelInstallState.NotStarted ->
-            copy(isDownloadingModel = false)
+            copy(isDownloadingModel = false, isWaitingForWifi = false)
         is BaseModelInstallState.Downloading ->
-            copy(isDownloadingModel = true, modelDownloadProgress = installState.progress, modelDownloadError = null)
+            copy(
+                isDownloadingModel = true,
+                isWaitingForWifi = false,
+                modelDownloadProgress = installState.progress,
+                modelDownloadError = null,
+            )
         is BaseModelInstallState.NeedsUserConfirmation ->
-            copy(isDownloadingModel = false)
+            copy(isDownloadingModel = false, isWaitingForWifi = true, modelDownloadError = null)
         is BaseModelInstallState.Installed ->
-            copy(isDownloadingModel = false, modelDownloadProgress = 1f, modelDownloadError = null)
+            copy(
+                isDownloadingModel = false,
+                isWaitingForWifi = false,
+                modelDownloadProgress = 1f,
+                modelDownloadError = null,
+            )
         is BaseModelInstallState.Failed ->
-            copy(isDownloadingModel = false, modelDownloadError = installState.message)
+            copy(
+                isDownloadingModel = false,
+                isWaitingForWifi = false,
+                modelDownloadError = installState.message,
+            )
     }
 
 internal fun PayslipViewModel.checkGemmaSupport() {

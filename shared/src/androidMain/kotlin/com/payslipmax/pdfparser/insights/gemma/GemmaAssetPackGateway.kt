@@ -56,8 +56,16 @@ class DefaultGemmaAssetPackGateway(
             }
             AssetPackStatus.COMPLETED ->
                 BaseModelInstallState.Installed(resolveInstalledGemmaModelPath() ?: "")
-            AssetPackStatus.FAILED ->
-                BaseModelInstallState.Failed("Asset pack download failed (error code ${errorCode()})")
+            AssetPackStatus.FAILED -> {
+                val code = errorCode()
+                val message =
+                    if (code == -15) {
+                        "Local AI model requires Google Play installation (Error -15: Unrecognized install)"
+                    } else {
+                        "Asset pack download failed (error code $code)"
+                    }
+                BaseModelInstallState.Failed(message)
+            }
             AssetPackStatus.CANCELED ->
                 BaseModelInstallState.Failed("Asset pack download canceled")
             AssetPackStatus.WAITING_FOR_WIFI, AssetPackStatus.REQUIRES_USER_CONFIRMATION -> {

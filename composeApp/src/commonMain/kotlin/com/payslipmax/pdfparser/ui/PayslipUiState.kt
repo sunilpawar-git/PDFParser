@@ -24,6 +24,7 @@ data class PayslipUiState(
     val isGemmaSupported: Boolean = true,
     val gemmaSupportReason: String? = null,
     val isDownloadingModel: Boolean = false,
+    val isWaitingForWifi: Boolean = false,
     val modelDownloadProgress: Float = 0f,
     val modelDownloadError: String? = null,
     val expandedHistoryYears: Set<Int> = emptySet(),
