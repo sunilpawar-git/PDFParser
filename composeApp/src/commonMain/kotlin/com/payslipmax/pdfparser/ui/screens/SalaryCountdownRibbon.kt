@@ -13,8 +13,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.graphics.vector.path
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
 import com.payslipmax.pdfparser.domain.SalaryCountdownUiModel
 import com.payslipmax.pdfparser.ui.theme.AppDimensions
 import com.payslipmax.pdfparser.ui.theme.SalaryRibbonStrings
@@ -25,16 +29,16 @@ fun SalaryCountdownRibbon(
     modifier: Modifier = Modifier,
 ) {
     val isDark = isSystemInDarkTheme()
-    val secondaryColor = MaterialTheme.colorScheme.secondary
     val surfaceColor = MaterialTheme.colorScheme.surface
-    val gradientColors = getRibbonGradientColors(secondaryColor, surfaceColor, isDark)
-    val borderColor = secondaryColor.copy(alpha = if (isDark) 0.35f else 0.45f)
+    val primaryColor = MaterialTheme.colorScheme.primary
+    val gradientColors = getRibbonGradientColors(primaryColor, surfaceColor, isDark)
+    val borderColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.08f)
 
     Card(
         modifier = modifier.fillMaxWidth().testTag("salary_countdown_ribbon"),
         shape = RoundedCornerShape(AppDimensions.CornerRadius),
         border = BorderStroke(AppDimensions.BorderThin, borderColor),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+        colors = CardDefaults.cardColors(containerColor = surfaceColor),
     ) {
         Box(
             modifier =
@@ -62,9 +66,11 @@ private fun RibbonHeaderRow(countdown: SalaryCountdownUiModel) {
             horizontalArrangement = Arrangement.spacedBy(AppDimensions.SpacingSmall),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Text(
-                text = if (countdown.isPaydayToday) "🎉" else "⚡",
-                style = MaterialTheme.typography.titleMedium,
+            Icon(
+                imageVector = if (countdown.isPaydayToday) getCelebrationIcon() else getCalendarIcon(),
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.size(AppDimensions.IconSizeMedium),
             )
             Column {
                 Text(
@@ -138,21 +144,86 @@ private fun RibbonProgressRow(countdown: SalaryCountdownUiModel) {
 }
 
 private fun getRibbonGradientColors(
-    secondary: Color,
+    primaryAccent: Color,
     surface: Color,
     isDark: Boolean,
 ): List<Color> {
     return if (isDark) {
         listOf(
             surface,
-            secondary.copy(alpha = 0.16f),
+            primaryAccent.copy(alpha = 0.08f),
             surface,
         )
     } else {
         listOf(
             surface,
-            secondary.copy(alpha = 0.12f),
+            primaryAccent.copy(alpha = 0.04f),
             surface,
         )
     }
 }
+
+private fun getCalendarIcon(): ImageVector =
+    ImageVector.Builder(
+        name = "CalendarMonth",
+        defaultWidth = 24.dp,
+        defaultHeight = 24.dp,
+        viewportWidth = 24f,
+        viewportHeight = 24f,
+    ).apply {
+        path(fill = SolidColor(Color.Black)) {
+            moveTo(19f, 4f)
+            horizontalLineToRelative(-1f)
+            verticalLineTo(2f)
+            horizontalLineToRelative(-2f)
+            verticalLineToRelative(2f)
+            horizontalLineTo(8f)
+            verticalLineTo(2f)
+            horizontalLineTo(6f)
+            verticalLineToRelative(2f)
+            horizontalLineTo(5f)
+            curveTo(3.89f, 4f, 3.01f, 4.9f, 3.01f, 6f)
+            lineTo(3f, 20f)
+            curveToRelative(0f, 1.1f, 0.89f, 2f, 2f, 2f)
+            horizontalLineToRelative(14f)
+            curveToRelative(1.1f, 0f, 2f, -0.9f, 2f, -2f)
+            verticalLineTo(6f)
+            curveToRelative(0f, -1.1f, -0.9f, -2f, -2f, -2f)
+            close()
+            moveTo(19f, 20f)
+            horizontalLineTo(5f)
+            verticalLineTo(9f)
+            horizontalLineToRelative(14f)
+            verticalLineToRelative(11f)
+            close()
+            moveTo(19f, 7f)
+            horizontalLineTo(5f)
+            verticalLineTo(6f)
+            horizontalLineToRelative(14f)
+            verticalLineToRelative(1f)
+            close()
+        }
+    }.build()
+
+private fun getCelebrationIcon(): ImageVector =
+    ImageVector.Builder(
+        name = "Celebration",
+        defaultWidth = 24.dp,
+        defaultHeight = 24.dp,
+        viewportWidth = 24f,
+        viewportHeight = 24f,
+    ).apply {
+        path(fill = SolidColor(Color.Black)) {
+            moveTo(2f, 22f)
+            lineToRelative(14f, -5f)
+            lineToRelative(-9f, -9f)
+            close()
+            moveTo(14.53f, 12.53f)
+            lineToRelative(5.59f, -5.59f)
+            curveToRelative(0.49f, -0.49f, 1.28f, -0.49f, 1.77f, 0f)
+            lineToRelative(0.59f, 0.59f)
+            curveToRelative(0.49f, 0.49f, 0.49f, 1.28f, 0f, 1.77f)
+            lineToRelative(-5.59f, 5.59f)
+            close()
+        }
+    }.build()

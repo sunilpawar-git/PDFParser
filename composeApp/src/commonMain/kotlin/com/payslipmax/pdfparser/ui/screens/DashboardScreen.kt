@@ -164,10 +164,6 @@ private fun PopulatedDashboard(
                 .verticalScroll(scrollState)
                 .padding(AppDimensions.PaddingMedium),
     ) {
-        val countdown = remember { SalaryCountdownCalculator.getCurrentCountdown() }
-        SalaryCountdownRibbon(countdown = countdown)
-        Spacer(modifier = Modifier.height(AppDimensions.SpacingMedium))
-
         selected?.let { payslip ->
             OfficerInfoBar(
                 payslip = payslip,
@@ -186,6 +182,10 @@ private fun PopulatedDashboard(
         selected?.let {
             Spacer(modifier = Modifier.height(AppDimensions.SpacingLarge))
             StatsGridSection(payslip = it)
+
+            val countdown = remember { SalaryCountdownCalculator.getCurrentCountdown() }
+            Spacer(modifier = Modifier.height(AppDimensions.SpacingLarge))
+            SalaryCountdownRibbon(countdown = countdown)
 
             Spacer(modifier = Modifier.height(AppDimensions.SpacingLarge))
             TrendChartCard(payslips = payslips)
