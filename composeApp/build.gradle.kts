@@ -160,12 +160,12 @@ val isReleaseSigningConfigured =
 
 android {
     namespace = "com.payslipmax.pdfparser"
-    compileSdk = 35
+    compileSdk = 36
     defaultConfig {
         applicationId = "in.aiborne.payslipmax"
         minSdk = 26
-        targetSdk = 35
-        versionCode = 4
+        targetSdk = 36
+        versionCode = 5
         versionName = appVersionName
     }
     // On-demand asset pack carrying the Tier 6 Gemma base model (Play Asset Delivery).
