@@ -1,6 +1,6 @@
 // SSOT for the app's marketing version: shared with composeApp/build.gradle.kts (Android versionName).
 #include "../../version.properties"
 
-TEAM_ID=QMMDZ9Y4UF
+TEAM_ID=45V78D3W69
 BUNDLE_ID=in.aiborne.payslipmax
 APP_NAME=PayslipMax
