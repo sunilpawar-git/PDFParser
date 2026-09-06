@@ -9,12 +9,18 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -103,9 +109,15 @@ private fun PasswordInputField(
     onTogglePasswordVisibility: () -> Unit,
     onSubmitPassword: () -> Unit,
 ) {
+    var fieldValue by remember(state.passwordInput) {
+        mutableStateOf(TextFieldValue(text = state.passwordInput, selection = TextRange(state.passwordInput.length)))
+    }
     OutlinedTextField(
-        value = state.passwordInput,
-        onValueChange = onPasswordChanged,
+        value = fieldValue,
+        onValueChange = {
+            fieldValue = it.copy(selection = TextRange(it.text.length))
+            onPasswordChanged(it.text)
+        },
         label = { Text(ImportStrings.labelPdfPassword) },
         isError = state.errorMessage != null,
         visualTransformation = if (state.isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
