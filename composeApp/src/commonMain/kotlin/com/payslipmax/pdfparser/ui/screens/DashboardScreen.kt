@@ -15,7 +15,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.window.Dialog
 import com.payslipmax.pdfparser.domain.ParsedPayslip
 import com.payslipmax.pdfparser.domain.SalaryCountdownCalculator
@@ -63,55 +62,6 @@ fun DashboardScreen(
 
     if (showUploadDialog) {
         UploadDialog(uiState, onPickPdfTrigger, viewModel, onDismiss = { showUploadDialog = false })
-    }
-}
-
-@Composable
-private fun EmptyDashboardPlaceholder(modifier: Modifier = Modifier) {
-    Column(
-        modifier =
-            modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colorScheme.background)
-                .padding(AppDimensions.PaddingMedium),
-        horizontalAlignment = Alignment.CenterHorizontally,
-    ) {
-        val countdown = remember { SalaryCountdownCalculator.getCurrentCountdown() }
-        SalaryCountdownRibbon(countdown = countdown)
-
-        Column(
-            modifier = Modifier.weight(1f).padding(AppDimensions.PaddingLarge),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center,
-        ) {
-            Text(
-                text = "📄",
-                fontSize = AppDimensions.FontSizeEmoji,
-                modifier = Modifier.padding(bottom = AppDimensions.SpacingLarge),
-            )
-            Text(
-                text = AppStrings.dashboardEmptyStateTitle,
-                style = MaterialTheme.typography.headlineSmall,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onBackground,
-                textAlign = TextAlign.Center,
-            )
-            Spacer(modifier = Modifier.height(AppDimensions.SpacingSmall))
-            Text(
-                text = AppStrings.dashboardEmptyStateDesc,
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                textAlign = TextAlign.Center,
-                modifier = Modifier.padding(horizontal = AppDimensions.PaddingLarge),
-            )
-            Spacer(modifier = Modifier.height(AppDimensions.SpacingHuge))
-            Text(
-                text = AppStrings.dashboardEmptyStateLabel,
-                style = MaterialTheme.typography.labelMedium,
-                color = MaterialTheme.colorScheme.primary,
-                fontWeight = FontWeight.SemiBold,
-            )
-        }
     }
 }
 
