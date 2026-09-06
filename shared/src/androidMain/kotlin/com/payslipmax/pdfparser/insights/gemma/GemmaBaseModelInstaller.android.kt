@@ -45,7 +45,14 @@ class AndroidGemmaBaseModelInstaller(
                     }
                 resolvedGateway.fetch(PACK_NAME)
             } catch (e: Exception) {
-                BaseModelInstallState.Failed(e.message ?: "Asset pack fetch failed")
+                val rawMsg = e.message ?: "Asset pack fetch failed"
+                val friendlyMsg =
+                    if (rawMsg.contains("-15")) {
+                        "Local AI model requires Google Play installation (Error -15: Unrecognized install)"
+                    } else {
+                        rawMsg
+                    }
+                BaseModelInstallState.Failed(friendlyMsg)
             }
     }
 
