@@ -6,4 +6,5 @@ object AppStringsSupport {
     const val reportIssueShareTitle = "Share Diagnostic Report"
     const val installationIdPrefix = "Installation ID: "
     const val settingsStagingBackgroundCrashBtn = "Background Thread Crash (IO/Default)"
+    const val settingsStagingSimulateParserFailureBtn = "Simulate PDF Parse Failure (Non-Fatal)"
 }
