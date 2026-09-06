@@ -3,6 +3,10 @@ package com.payslipmax.pdfparser.logging
 import com.payslipmax.pdfparser.subscription.isDebugBuild
 
 object Logger {
+    private val crashReporter: com.payslipmax.pdfparser.telemetry.CrashReporter by lazy {
+        com.payslipmax.pdfparser.telemetry.provideCrashReporter()
+    }
+
     fun d(
         tag: String,
         message: String,
@@ -17,6 +21,7 @@ object Logger {
         message: String,
     ) {
         println("[WARN] [$tag] $message")
+        crashReporter.log("WARN [$tag] $message")
     }
 
     fun e(
@@ -26,5 +31,9 @@ object Logger {
     ) {
         val errorMsg = throwable?.let { " - ${it.message}" } ?: ""
         println("[ERROR] [$tag] $message$errorMsg")
+        crashReporter.log("ERROR [$tag] $message")
+        if (throwable != null) {
+            crashReporter.recordException(throwable, mapOf("error_tag" to tag))
+        }
     }
 }
