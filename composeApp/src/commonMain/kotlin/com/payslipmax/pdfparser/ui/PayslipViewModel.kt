@@ -166,7 +166,13 @@ class PayslipViewModel(
                     )
                 }
             } else {
-                val rawMessage = result.exceptionOrNull()?.message ?: ""
+                val error = result.exceptionOrNull()
+                val rawMessage = error?.message ?: ""
+                com.payslipmax.pdfparser.logging.Logger.e(
+                    "PayslipViewModel",
+                    "importPayslip failed for $filename: $rawMessage",
+                    error,
+                )
                 val friendlyError =
                     when {
                         rawMessage.contains("UNRECOGNIZED_GRAMMAR") || rawMessage.contains("PdfPreFlightValidationFailed") ->

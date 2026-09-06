@@ -25,8 +25,9 @@ actual class PlatformPdfParser actual constructor() : PdfParser {
         password: String,
         filename: String,
     ): Result<ParsedPayslip> {
+        Logger.w("PlatformPdfParser", "Starting decryptAndParse for $filename (bytes: ${pdfBytes.size})")
         return extractTokens(pdfBytes, password, filename).mapCatching { tokenized ->
-            Logger.d("PlatformPdfParser", "Starting GrammarAwareParser.parse...")
+            Logger.w("PlatformPdfParser", "Extracted ${tokenized.tableTokens.size} tokens. Starting GrammarAwareParser.parse...")
             val gemmaEngine =
                 try {
                     val modelPath = com.payslipmax.pdfparser.insights.gemma.resolveInstalledGemmaModelPath()
@@ -53,8 +54,10 @@ actual class PlatformPdfParser actual constructor() : PdfParser {
                     fallbackExtractor = fallbackExtractor,
                     diagnosticExtractor = diagnosticExtractor,
                 )
-            Logger.d("PlatformPdfParser", "Finished GrammarAwareParser.parse. Success: ${parseResult.isSuccess}")
+            Logger.w("PlatformPdfParser", "Finished GrammarAwareParser.parse. Success: ${parseResult.isSuccess}")
             parseResult.getOrThrow()
+        }.onFailure { err ->
+            Logger.e("PlatformPdfParser", "decryptAndParse failed for $filename", err)
         }
     }
 
@@ -72,6 +75,7 @@ actual class PlatformPdfParser actual constructor() : PdfParser {
                     }
                 }
             } catch (e: Throwable) {
+                Logger.e("PlatformPdfParser", "extractTokens failed for $filename", e)
                 Result.failure(e)
             }
         }
