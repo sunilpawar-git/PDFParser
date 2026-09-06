@@ -223,6 +223,7 @@ fun DeveloperSandboxSection(
                 onSeedClick = { viewModel.seedMockData() },
                 onClearClick = { viewModel.clearAllData() },
                 onCrashTestClick = { com.payslipmax.pdfparser.telemetry.triggerTestCrash() },
+                onBackgroundCrashTestClick = { com.payslipmax.pdfparser.telemetry.triggerBackgroundTestCrash() },
             )
         }
     }

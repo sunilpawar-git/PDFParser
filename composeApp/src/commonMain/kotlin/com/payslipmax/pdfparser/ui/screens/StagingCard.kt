@@ -11,6 +11,7 @@ fun StagingCard(
     onSeedClick: () -> Unit,
     onClearClick: () -> Unit,
     onCrashTestClick: (() -> Unit)? = null,
+    onBackgroundCrashTestClick: (() -> Unit)? = null,
     modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier.fillMaxWidth()) {
@@ -32,6 +33,14 @@ fun StagingCard(
                 icon = "💥",
                 title = AppStrings.settingsStagingCrashTestBtn,
                 onClick = onCrashTestClick,
+            )
+        }
+        if (onBackgroundCrashTestClick != null) {
+            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
+            SettingsRow(
+                icon = "⚡",
+                title = com.payslipmax.pdfparser.ui.theme.AppStringsSupport.settingsStagingBackgroundCrashBtn,
+                onClick = onBackgroundCrashTestClick,
             )
         }
     }
