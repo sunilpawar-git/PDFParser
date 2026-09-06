@@ -117,11 +117,13 @@ fun PayslipViewModel.onToggleImportPasswordVisibility() {
     }
 }
 
-fun PayslipViewModel.onDismissImport() {
+fun PayslipViewModel.startImport() {
     pendingImportPdfBytes = null
     pendingImportFilename = null
-    _uiState.update { it.copy(importUiState = ImportUiState.Idle, importError = null) }
+    _uiState.update { it.copy(importUiState = ImportUiState.Idle, importError = null, importSuccess = false) }
 }
+
+fun PayslipViewModel.onDismissImport() = startImport()
 
 private suspend fun PayslipViewModel.handleSuccessfulImport(parsed: ParsedPayslip) {
     pendingImportPdfBytes = null

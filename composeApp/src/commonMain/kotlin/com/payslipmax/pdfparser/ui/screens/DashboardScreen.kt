@@ -27,6 +27,7 @@ import com.payslipmax.pdfparser.ui.onSubmitImportPassword
 import com.payslipmax.pdfparser.ui.onToggleImportPasswordVisibility
 import com.payslipmax.pdfparser.ui.saveDashboardScrollPosition
 import com.payslipmax.pdfparser.ui.screens.importflow.ImportPayslipDialog
+import com.payslipmax.pdfparser.ui.startImport
 import com.payslipmax.pdfparser.ui.theme.AppDimensions
 import com.payslipmax.pdfparser.ui.theme.AppStrings
 import kotlin.math.round
@@ -45,7 +46,9 @@ fun DashboardScreen(
 
     LaunchedEffect(uiState.importUiState) {
         if (uiState.importUiState is ImportUiState.Success) {
+            kotlinx.coroutines.delay(1200)
             showUploadDialog = false
+            viewModel.startImport()
         }
     }
 
@@ -54,7 +57,10 @@ fun DashboardScreen(
         payslips = payslips,
         selected = selected,
         viewModel = viewModel,
-        onUploadClick = { showUploadDialog = true },
+        onUploadClick = {
+            viewModel.startImport()
+            showUploadDialog = true
+        },
         modifier = modifier,
     )
 
