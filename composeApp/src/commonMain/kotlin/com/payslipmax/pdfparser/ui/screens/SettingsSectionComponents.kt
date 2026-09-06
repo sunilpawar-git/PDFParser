@@ -184,6 +184,30 @@ fun HelpSupportSection(
             title = AppStrings.settingsHelpPrivacyTitle,
             onClick = { onNavigateTo(Screen.PrivacyPolicy) },
         )
+        HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
+        SettingsRow(
+            icon = "🛠️",
+            title = com.payslipmax.pdfparser.ui.theme.AppStringsSupport.settingsReportIssueTitle,
+            subtitle = com.payslipmax.pdfparser.ui.theme.AppStringsSupport.settingsReportIssueSubtitle,
+            onClick = {
+                val sysInfo = com.payslipmax.pdfparser.platform.getPlatformSystemInfo()
+                val anonId = com.payslipmax.pdfparser.telemetry.InstallationIdManager().getOrCreateInstallationId()
+                val report =
+                    com.payslipmax.pdfparser.telemetry.DiagnosticReportGenerator.generateReport(
+                        appVersion = com.payslipmax.pdfparser.platform.platformAppVersion(),
+                        installationId = anonId,
+                        osVersion = sysInfo.osVersion,
+                        deviceModel = sysInfo.deviceModel,
+                        cpuArch = sysInfo.cpuArchitecture,
+                        lastScreen = "Settings",
+                        lastOperation = "User Support Request",
+                    )
+                com.payslipmax.pdfparser.utils.shareText(
+                    text = report,
+                    title = com.payslipmax.pdfparser.ui.theme.AppStringsSupport.reportIssueShareTitle,
+                )
+            },
+        )
     }
 }
 
@@ -244,18 +268,27 @@ fun SettingsHeader(
 fun VersionFooter(
     modifier: Modifier = Modifier,
 ) {
+    val anonId =
+        remember {
+            com.payslipmax.pdfparser.telemetry.InstallationIdManager().getOrCreateInstallationId()
+        }
     Column(
         modifier =
             modifier
                 .fillMaxWidth()
                 .padding(vertical = AppDimensions.PaddingMedium),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(AppDimensions.SpacingSmall),
+        verticalArrangement = Arrangement.spacedBy(AppDimensions.SpacingTiny),
     ) {
         Text(
             text = AppStrings.appVersion,
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
+        )
+        Text(
+            text = "${com.payslipmax.pdfparser.ui.theme.AppStringsSupport.installationIdPrefix}$anonId",
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f),
         )
     }
 }
