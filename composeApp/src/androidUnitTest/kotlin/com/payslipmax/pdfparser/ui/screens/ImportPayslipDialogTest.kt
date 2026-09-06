@@ -187,4 +187,36 @@ class ImportPayslipDialogTest {
             onNodeWithTag("btn_close_dialog").performClick()
             assertTrue(dismissed)
         }
+
+    @OptIn(ExperimentalTestApi::class)
+    @Test
+    fun testUnlockPdfStep_selectionStaysPinnedToEndAfterMidStringEdit() =
+        runComposeUiTest {
+            var password = ""
+            setContent {
+                ImportPayslipDialog(
+                    importUiState =
+                        ImportUiState.PasswordRequired(
+                            fileName = "payslip.pdf",
+                            formattedFileSize = "100 KB",
+                            passwordInput = password,
+                        ),
+                    onSelectFileClick = {},
+                    onPasswordChanged = { password = it },
+                    onTogglePasswordVisibility = {},
+                    onSubmitPassword = {},
+                    onChooseDifferentFile = {},
+                    onDismiss = {},
+                )
+            }
+
+            val field = onNodeWithTag("input_pdf_password")
+            field.performTextInput("abcd")
+            field.performTextInputSelection(androidx.compose.ui.text.TextRange(1))
+            field.performTextInput("X")
+
+            kotlin.test.assertEquals("abcdX", password)
+            val selection = field.fetchSemanticsNode().config[androidx.compose.ui.semantics.SemanticsProperties.TextSelectionRange]
+            kotlin.test.assertEquals(androidx.compose.ui.text.TextRange(password.length), selection)
+        }
 }
