@@ -174,6 +174,18 @@ class PayslipViewModel(
                     "importPayslip failed for $safeFilename: $rawMessage",
                     error,
                 )
+                if (error != null && !rawMessage.contains("PASSWORD_PROTECTED") && !rawMessage.contains("InvalidPasswordException")) {
+                    val crashReporter = com.payslipmax.pdfparser.telemetry.provideCrashReporter()
+                    crashReporter.recordException(
+                        error,
+                        mapOf(
+                            "operation" to "pdf_import",
+                            "parser_stage" to if (rawMessage.contains("UNRECOGNIZED_GRAMMAR")) "preflight" else "grammar",
+                            "file_size_bytes" to pdfBytes.size.toString(),
+                            "error_reason" to rawMessage.take(100),
+                        ),
+                    )
+                }
                 val friendlyError =
                     when {
                         rawMessage.contains("UNRECOGNIZED_GRAMMAR") || rawMessage.contains("PdfPreFlightValidationFailed") ->

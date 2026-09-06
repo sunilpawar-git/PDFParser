@@ -212,24 +212,6 @@ fun HelpSupportSection(
 }
 
 @Composable
-fun DeveloperSandboxSection(
-    devModeEnabled: Boolean,
-    viewModel: PayslipViewModel,
-) {
-    if (devModeEnabled) {
-        SettingsCategoryHeader(title = AppStrings.settingsStagingTitle)
-        SettingsCategoryCard {
-            StagingCard(
-                onSeedClick = { viewModel.seedMockData() },
-                onClearClick = { viewModel.clearAllData() },
-                onCrashTestClick = { com.payslipmax.pdfparser.telemetry.triggerTestCrash() },
-                onBackgroundCrashTestClick = { com.payslipmax.pdfparser.telemetry.triggerBackgroundTestCrash() },
-            )
-        }
-    }
-}
-
-@Composable
 fun SettingsHeader(
     onTitleClick: () -> Unit,
 ) {
