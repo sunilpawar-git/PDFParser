@@ -16,6 +16,32 @@ class SwiftGemmaInstallTelemetry: NSObject, IosTelemetryDelegate {
     }
 }
 
+class SwiftCrashReporterDelegate: NSObject, IosCrashReporterDelegate {
+    func log(message: String) {
+        Crashlytics.crashlytics().log(message)
+    }
+
+    func setCustomKey(key: String, value: String) {
+        Crashlytics.crashlytics().setCustomValue(value, forKey: key)
+    }
+
+    func recordException(throwable: KotlinThrowable, metadata_: [String : String]) {
+        for (k, v) in metadata_ {
+            Crashlytics.crashlytics().setCustomValue(v, forKey: k)
+        }
+        let userInfo: [String: Any] = [
+            NSLocalizedDescriptionKey: throwable.message ?? "Kotlin Exception",
+            "KotlinStackTrace": throwable.description
+        ]
+        let nsError = NSError(domain: "in.aiborne.payslipmax.kmp", code: -1, userInfo: userInfo)
+        Crashlytics.crashlytics().record(error: nsError)
+    }
+
+    func setUserId(userId: String) {
+        Crashlytics.crashlytics().setUserID(userId)
+    }
+}
+
 class AppDelegate: NSObject, UIApplicationDelegate {
     func application(
         _ application: UIApplication,
@@ -25,6 +51,9 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 
         // Register telemetry delegate
         IosGemmaInstallTelemetry.companion.delegate = SwiftGemmaInstallTelemetry()
+
+        // Register Crashlytics delegate
+        IosCrashReporter.companion.delegate = SwiftCrashReporterDelegate()
 
         // Ensure user is signed in anonymously to retrieve a valid ID token
         if Auth.auth().currentUser == nil {
