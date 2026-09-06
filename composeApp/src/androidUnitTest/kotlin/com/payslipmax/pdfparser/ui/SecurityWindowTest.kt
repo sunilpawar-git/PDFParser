@@ -11,16 +11,15 @@ import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
-import kotlin.test.assertTrue
 
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [33])
 class SecurityWindowTest {
     @Test
     fun shouldApplyFlagSecureIsTrueForReleaseBuilds() {
-        assertTrue(
+        assertFalse(
             shouldApplyFlagSecure(isDebug = false),
-            "Shipped (release) builds must block screenshots/screen-recording -- every screen can show real salary/PII data",
+            "Temporarily disabled during closed testing so testers can share screenshots of issues",
         )
     }
 
