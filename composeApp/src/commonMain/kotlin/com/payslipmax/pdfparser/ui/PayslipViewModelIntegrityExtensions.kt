@@ -10,6 +10,14 @@ import kotlinx.coroutines.launch
 fun PayslipViewModel.verifyAppIntegrity() {
     viewModelScope.launch {
         val status = appIntegrityChecker.checkIntegrity()
+        if (!status.isAllowedToRun) {
+            com.payslipmax.pdfparser.logging.Logger.w(
+                "AppIntegrity",
+                "Integrity violation detected: $status",
+            )
+        } else {
+            com.payslipmax.pdfparser.logging.Logger.d("AppIntegrity", "Integrity verified: $status")
+        }
         _uiState.update { it.copy(appIntegrityStatus = status) }
     }
 }

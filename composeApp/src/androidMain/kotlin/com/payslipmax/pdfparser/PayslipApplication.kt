@@ -11,7 +11,18 @@ class PayslipApplication : Application() {
         super.onCreate()
         com.payslipmax.pdfparser.crypto.ContextHolder.context = this
         try {
-            com.google.firebase.crashlytics.FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(true)
+            val crashlytics = com.google.firebase.crashlytics.FirebaseCrashlytics.getInstance()
+            crashlytics.setCrashlyticsCollectionEnabled(true)
+            val defaultHandler = Thread.getDefaultUncaughtExceptionHandler()
+            Thread.setDefaultUncaughtExceptionHandler { thread, throwable ->
+                try {
+                    crashlytics.setCustomKey("fatal_thread", thread.name)
+                    crashlytics.recordException(throwable)
+                } catch (_: Throwable) {
+                } finally {
+                    defaultHandler?.uncaughtException(thread, throwable)
+                }
+            }
         } catch (_: Exception) {
             // No-op under unit test runners where Firebase is not initialized
         }
